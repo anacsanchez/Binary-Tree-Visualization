@@ -1,5 +1,3 @@
-/* global d3 */
-
 import { leftChild, parent } from "./heap.js";
 
 export const regFill = "lightblue";
