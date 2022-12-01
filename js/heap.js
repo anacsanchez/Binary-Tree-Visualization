@@ -6,15 +6,15 @@ export function swap(arr, a, b) {
   arr[b] = temp;
 }
 
-export function parent(index) {
-  return Math.floor((index - 1) / 2);
+export function getParentIndex(childIndex) {
+  return Math.floor((childIndex - 1) / 2);
 }
 
-export function leftChild(index) {
+export function getLeftChildIndex(index) {
   return 2 * index + 1;
 }
 
-export function rightChild(index) {
+export function getRightChildIndex(index) {
   return 2 * index + 2;
 }
 
@@ -26,10 +26,10 @@ export function heapify(arr) {
   for (i = 1; i < arr.length; ++i)
   {
       k = i;
-      while (k > 0 && arr[k] > arr[parent(k)])
+      while (k > 0 && arr[k] > arr[getParentIndex(k)])
       {
-          swap(arr, parent(k), k);
-          k = parent(k);
+          swap(arr, getParentIndex(k), k);
+          k = getParentIndex(k);
       }
   }
   return arr;
@@ -42,15 +42,15 @@ export function reheapifyDown(arr, length) {
 
   //loop keeps going while the array is not a heap and the current element
   //has at least a left child. If leftChild(index) is greater than the length of the array, the index does not have any children
-  while (!isHeap && leftChild(index) < length) {
-    if (rightChild(index) >= length) {   //no right child
-      bigChildIndex = leftChild(index);
+  while (!isHeap && getLeftChildIndex(index) < length) {
+    if (getRightChildIndex(index) >= length) {   //no right child
+      bigChildIndex = getLeftChildIndex(index);
     }
-    else if (arr[leftChild(index)] > arr[rightChild(index)]) { //if left child is the bigger of the two children
-      bigChildIndex = leftChild(index);
+    else if (arr[getLeftChildIndex(index)] > arr[getRightChildIndex(index)]) { //if left child is the bigger of the two children
+      bigChildIndex = getLeftChildIndex(index);
     }
     else {  //then right child is bigger
-      bigChildIndex = rightChild(index)
+      bigChildIndex = getRightChildIndex(index)
     }
     //If the larger child's value is bigger than the current(parent) node, swap the values and continue the loop; otherwise it's a heap
     if (arr[index] < arr[bigChildIndex]) {

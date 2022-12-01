@@ -1,4 +1,4 @@
-import { leftChild, parent } from "./heap.js";
+import {getParentIndex, getLeftChildIndex} from "./heap.js";
 import { Node, addCircleAttrs, addHighlight, addLineAttrs, addTextAttrs, textColor } from "./node.js";
 import { createContainer } from "./utils.js";
 
@@ -16,7 +16,7 @@ export function Tree() {
 			.enter()
 			.append("text")
 			.attr("class", "circle")
-			.attr("x", d => d.cx - (d.value.toString().length*4))
+			.attr("x", d => d.cx - (d.value.toString().length * 4))
 			.attr("y", 0)
 			.text(d => d.value)
 			.transition()
@@ -67,32 +67,26 @@ export function Tree() {
 		this.container = createContainer("binary-tree", arr, ySpacing);
 		this.start = this.container.attr("width") / 2;
 
-		let i = 0;
-		let node = {};
-
-		while (i < arr.length) {
-			let depth = Math.ceil(Math.log2(i + 2)) - 1;
-
-			node = new Node(arr[i], i, depth);
-			node.radius = radius;
-
-			if (i === 0) {
+		arr.forEach((num, i) => {
+			const depth = Math.ceil(Math.log2(i + 2)) - 1;
+			const node = new Node(arr[i], i, depth, null, null, radius);
+			const parentNode = i === 0 ? null : this.data[getParentIndex(i)];
+			if (i > 0) { //if node is not root
+				if (i === getLeftChildIndex(getParentIndex(i))) {
+					node.cx = parentNode.cx - (xSpacing / depth);
+				}
+				else {
+					node.cx = parentNode.cx + (xSpacing / depth);
+				}
+				node.cy = parentNode.cy + ySpacing;
+				this.container.append("line").call(addLineAttrs, "black", parentNode.cx, parentNode.cy, node.cx, node.cy);
+			} else { //node is root
 				node.cx = this.start;
 				node.cy = radius;
 			}
-			else {
-				if (i === leftChild(parent(i))) {
-					node.cx = this.data[parent(i)].cx - xSpacing/depth;
-				}
-				else {
-					node.cx = this.data[parent(i)].cx + xSpacing/depth;
-				}
-				node.cy = this.data[parent(i)].cy + ySpacing;
-				this.container.append("line").call(addLineAttrs, "black", this.data[parent(i)].cx, this.data[parent(i)].cy, node.cx, node.cy);
-			}
 			this.addNode(node);
 			++i;
-		}
+		})
 		this.nodes = this.container.selectAll("circle")
 			.raise()
 			.on("click", addHighlight);
@@ -106,37 +100,35 @@ export function Tree() {
 		this.container = createContainer("binary-tree", inputArr, ySpacing);
 		this.start = this.container.attr("width") / 2;
 
-		let midPoint = Math.floor(inputArr.length / 2);
-		let root = new Node(inputArr[midPoint], null, 1, this.start, radius, radius);
+		const midPoint = Math.floor(inputArr.length / 2);
+		const root = new Node(inputArr[midPoint], null, 1, this.start, radius, radius);
 
 		const insertTreeNode = (arr, depth, cx) => {
 			if (!arr.length) { return; }
-			let mid = Math.floor(arr.length / 2);
-			let node = new Node(arr[mid], null, depth, cx , radius + (depth * ySpacing), radius);
-			let nextDepth = depth + 1;
+			const midIndex = Math.floor(arr.length / 2);
+			const node = new Node(arr[midIndex], null, depth, cx, radius + (depth * ySpacing), radius);
 
-			node.left = insertTreeNode(arr.slice(0, mid), nextDepth, cx - xSpacing/nextDepth);
-			node.right = insertTreeNode(arr.slice(mid + 1), nextDepth, cx + xSpacing/nextDepth);
+			node.left = insertTreeNode(arr.slice(0, midIndex), depth + 1, node.cx - xSpacing / (depth + 1));
+			node.right = insertTreeNode(arr.slice(midIndex + 1), depth + 1, node.cx + xSpacing / (depth + 1));
 
-			if (arr.slice(0, mid).length) {
-				this.container.append("line").call(addLineAttrs, "black", cx, radius+(depth * ySpacing), cx - xSpacing/nextDepth, radius + nextDepth * ySpacing);
+			if (node.left) {
+				this.container.append("line").call(addLineAttrs, "black", node.cx, node.cy, node.left.cx, node.left.cy);
 			}
-			if (arr.slice(mid + 1).length) {
-				this.container.append("line").call(addLineAttrs, "black", cx, radius+(depth * ySpacing), cx + xSpacing/nextDepth, radius + nextDepth * ySpacing);
+			if (node.right) {
+				this.container.append("line").call(addLineAttrs, "black", node.cx, node.cy, node.right.cx, node.right.cy);
 			}
-
-			this.addNode(node)
+			this.addNode(node);
 			return node;
 		}
 
 		root.left = insertTreeNode(inputArr.slice(0, midPoint), 1, this.start - xSpacing);
 		root.right = insertTreeNode(inputArr.slice(midPoint + 1), 1, this.start + xSpacing);
 
-		if (inputArr.slice(0, midPoint).length) {
-			this.container.append("line").call(addLineAttrs, "black", this.start, radius, this.start - xSpacing, radius + ySpacing);
+		if (root.left) {
+			this.container.append("line").call(addLineAttrs, "black", root.cx, root.cy, root.left.cx, root.left.cy);
 		}
-		if (inputArr.slice(midPoint + 1).length) {
-			this.container.append("line").call(addLineAttrs, "black", this.start, radius, this.start + xSpacing, radius + ySpacing);
+		if (root.right) {
+			this.container.append("line").call(addLineAttrs, "black", root.cx, root.cy, root.right.cx, root.right.cy);
 		}
 		this.addNode(root);
 
