@@ -1,10 +1,11 @@
-import { createContainer, regFill, regFillText, addHighlight, addTextAttrs } from "./nodes.js";
+import { fillColor, textColor, addHighlight, addTextAttrs } from "./node.js";
+import { createContainer } from "./utils.js";
 
-export function ArrayVisual(arr) {
+export function ArrayVisual(arr, ySpacing) {
 	this.data = arr;
 	this.container = null;
 	this.create = function (x, y, width, height) {
-		this.container = createContainer("array-visual", this.data, this.data.length * 60, 100);
+		this.container = createContainer("array-visual", this.data, ySpacing, this.data.length * 60, 100);
 		const arrayData = this.data.map((value, i) => {
 			if (i > 0) {
 				x += 50
@@ -14,7 +15,7 @@ export function ArrayVisual(arr) {
 				y: y,
 				width: width,
 				height: height,
-				color: regFill,
+				color: fillColor,
 				value: value,
 				index: i
 			}
@@ -44,7 +45,7 @@ export function ArrayVisual(arr) {
 			.attr("x", d => d.x + (d.width / 2) - (d.value.toString().length*4))
 			.attr("y", d => d.y + 30)
 			.text(d => d.value)
-			.call(addTextAttrs, regFillText, "sans-serif", "1em")
+			.call(addTextAttrs, textColor, "sans-serif", "1em")
 
 		this.container.selectAll("text.index")
 			.data(arrayData)
@@ -54,7 +55,7 @@ export function ArrayVisual(arr) {
 			.text((d, i) => `[ ${i} ]`)
 			.attr("x", d => d.x + 15)
 			.attr("y", d => d.y - 15)
-			.call(addTextAttrs, regFillText, "sans-serif", "15px")
+			.call(addTextAttrs, textColor, "sans-serif", "15px")
 
 		return arrayData;
 	}

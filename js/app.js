@@ -1,6 +1,10 @@
-import { Tree } from "./nodes.js";
+import { Tree } from "./tree.js";
 import { ArrayVisual } from "./arrayVisual.js";
 import { heapify } from "./heap.js";
+
+const DEFAULT_XSPACING = 200;
+const DEFAULT_YSPACING = 100;
+const DEFAULT_RADIUS = 35;
 
 function reset() {
   d3.selectAll('svg').remove();
@@ -11,8 +15,8 @@ function createMaxHeap(arr) {
   document.getElementById('visual-title').innerHTML = "Max-Heap Binary Tree And Array";
   heapify(arr);
   const tree = new Tree();
-  tree.createBinaryTree(arr);
-  const arrayDisplay = new ArrayVisual(arr);
+  tree.createBinaryTree(arr, DEFAULT_RADIUS, DEFAULT_XSPACING, DEFAULT_YSPACING);
+  const arrayDisplay = new ArrayVisual(arr, DEFAULT_YSPACING);
   arrayDisplay.create(2, 30, 50, 50);
 }
 
@@ -20,8 +24,8 @@ function createBinaryTreeAndArr(arr) {
   document.querySelector('#visual-title').innerHTML = "Binary Tree And Array";
   document.querySelector('#instructions').innerHTML = "Click a value in the binary tree or array to highlight its corresponding location in the data structure.";
   const tree = new Tree();
-  tree.createBinaryTree(arr);
-  const arrayDisplay = new ArrayVisual(arr);
+  tree.createBinaryTree(arr, DEFAULT_RADIUS, DEFAULT_XSPACING, DEFAULT_YSPACING);
+  const arrayDisplay = new ArrayVisual(arr, DEFAULT_YSPACING);
   arrayDisplay.create(2, 30, 50, 50);
 }
 
@@ -30,7 +34,7 @@ function createBinarySearchTree(arr) {
   document.querySelector('#instructions').innerHTML = "The input data sorted and arranged into a Binary Search Tree.";
   arr.sort((a, b) => a - b);
   const tree = new Tree();
-  tree.createBinarySearchTree(arr);
+  tree.createBinarySearchTree(arr, DEFAULT_RADIUS, DEFAULT_XSPACING, DEFAULT_YSPACING);
 }
 
 function createDisplay(optionId) {
