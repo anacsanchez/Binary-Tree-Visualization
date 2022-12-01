@@ -1,25 +1,25 @@
 let swaps = [];
 //Helper functions
-function swap(arr, a, b) {
+export function swap(arr, a, b) {
   let temp = arr[a];
   arr[a] = arr[b];
   arr[b] = temp;
 }
 
-function parent(index) {
+export function parent(index) {
   return Math.floor((index - 1) / 2);
 }
 
-function leftChild(index) {
+export function leftChild(index) {
   return 2 * index + 1;
 }
 
-function rightChild(index) {
+export function rightChild(index) {
   return 2 * index + 2;
 }
 
 //make an array into a max-heap
-function makeHeap(arr) {
+export function heapify(arr) {
   let i;  // Index of next element to be added to the heap
   let k;  // Index of new element as it is being pushed
 
@@ -35,7 +35,7 @@ function makeHeap(arr) {
   return arr;
 }
 
-function reheapifyDown(arr, length) {
+export function reheapifyDown(arr, length) {
   let index = 0;
   let bigChildIndex;
   let isHeap = false;

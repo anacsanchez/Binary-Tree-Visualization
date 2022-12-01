@@ -13,15 +13,17 @@ body {
 
 input {
   font-size: 1.1em;
+  width: 200px;
 }
 
-label  {
-  font-size: 1.1em;
+#array-input-label  {
+  font-size: 1.1rem;
+  margin: 0.5rem 0 0.5rem 0;
 }
 
 #title {
   font-size: 1.75em;
-  padding: 0 0 .5em 0;
+  padding: 0 0 .5rem 0;
 }
 
 #blurb {
@@ -49,20 +51,34 @@ header {
   margin: 0;
   padding: 1em;
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-button {
-  margin-top: 1em;
+#tree-options {
+  display: flex;
+  list-style: none;
+  justify-content: center;
+}
+
+.active-option {
+  background-color: lightblue !important;
+  color: black !important;
+}
+
+#tree-options > li {
+  margin: 1rem 0.5rem 0 0.5rem;
   background-color: rgb(69, 69, 69);
-  font-size: 1.1em;
+  font-size: 1.1rem;
   color: white;
-  padding: .25em .5em .25em .5em;
-  border: none;
-  border-radius: 3px;
+  padding: .25rem .5rem .25rem .5rem;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
   font-weight: normal;
 }
 
-rect:hover, circle:hover, text.circle:hover, text.rect:hover {
+rect:hover, circle:hover, text.circle:hover, text.rect:hover, #tree-options > li:hover {
   cursor: pointer;
 }
 
